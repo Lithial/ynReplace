@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { StepBar } from "./components/StepBar";
 import type { PronounSet } from "./engine";
 import { parse, presetById } from "./engine";
+import { ResultStep } from "./steps/ResultStep";
 import { StoryStep } from "./steps/StoryStep";
 import { ValuesStep } from "./steps/ValuesStep";
 import { loadSession, saveSession } from "./storage/autosave";
@@ -45,6 +46,7 @@ export default function App() {
           onNext={() => setStep(2)}
         />
       )}
+      {step === 2 && <ResultStep parsed={parsed} fields={fields} pronounSet={pronounSet} />}
     </div>
   );
 }
