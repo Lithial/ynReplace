@@ -15,7 +15,7 @@ export function StoryStep({
       <textarea
         id="story"
         className="story-input"
-        defaultValue={story}
+        value={story}
         onChange={(e) => onChange(e.target.value)}
         placeholder="{Name} walked in. {Subj} {v:be} ready..."
       />
