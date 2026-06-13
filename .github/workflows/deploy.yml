@@ -5,11 +5,9 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Allow the workflow to publish to GitHub Pages.
+# Least privilege by default; the deploy job opts into the Pages grants it needs.
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 # One deploy at a time; don't cancel an in-progress publish.
 concurrency:
@@ -19,8 +17,13 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # The build job runs third-party code (deps + vite); keep it read-only.
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -45,6 +48,10 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    # Only the deploy job needs the Pages write + OIDC token.
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
