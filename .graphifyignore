@@ -1,0 +1,3 @@
+# Files excluded from the graphify knowledge graph (still tracked in git).
+public/favicon.svg
+README.md
