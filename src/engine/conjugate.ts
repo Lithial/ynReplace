@@ -1,3 +1,5 @@
+import type { GrammaticalNumber } from "./types";
+
 const IRREGULAR: Record<string, { singular: string; plural: string }> = {
   be: { singular: "is", plural: "are" },
   was: { singular: "was", plural: "were" },
@@ -12,7 +14,7 @@ function thirdPersonSingular(base: string): string {
   return `${base}s`;
 }
 
-export function conjugate(base: string, number: "singular" | "plural"): string {
+export function conjugate(base: string, number: GrammaticalNumber): string {
   const irregular = IRREGULAR[base];
   if (irregular) return number === "singular" ? irregular.singular : irregular.plural;
   return number === "singular" ? thirdPersonSingular(base) : base;

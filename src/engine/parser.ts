@@ -2,12 +2,14 @@ import { detectCasing } from "./casing";
 import type { ParseResult, ParseWarning, PronounRole, Token } from "./types";
 
 const PRONOUN_ROLES: PronounRole[] = ["subj", "obj", "pos", "posp", "self"];
+// Note: the flat [^}]* does not support nested braces (e.g. {a{b}}); this is a known limitation.
 const MARKER = /\\\{|\{([^}]*)\}/g;
 
 type MarkerResult =
   | { kind: "token"; token: Token }
   | { kind: "warning"; warning: ParseWarning; literal: string };
 
+// Reserved role names (subj/obj/pos/posp/self) are always pronouns and cannot be used as custom field names.
 function isPronounRole(value: string): value is PronounRole {
   return PRONOUN_ROLES.includes(value as PronounRole);
 }
@@ -30,6 +32,10 @@ function classifyMarker(inner: string, raw: string, fields: string[]): MarkerRes
 
   const verbToken = parseVerbToken(inner, raw);
   if (verbToken) return { kind: "token", token: verbToken };
+
+  if (/^[vV]:\s*$/.test(inner)) {
+    return { kind: "warning", warning: { raw, message: "Empty verb base" }, literal: raw };
+  }
 
   const lower = inner.toLowerCase();
   if (isPronounRole(lower)) {

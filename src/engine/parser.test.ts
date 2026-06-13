@@ -60,4 +60,11 @@ describe("parse", () => {
     const r = parse("{ name }");
     expect(r.tokens[0]).toMatchObject({ kind: "field", name: "name" });
   });
+
+  it("warns on an empty verb base and keeps it as literal text", () => {
+    const r = parse("a {v:} b");
+    expect(r.warnings).toHaveLength(1);
+    expect(r.tokens).toEqual([{ kind: "text", value: "a {v:} b" }]);
+    expect(r.fields).toEqual([]);
+  });
 });

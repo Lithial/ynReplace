@@ -5,6 +5,7 @@ export { PRESET_PRONOUNS, presetById } from "./pronouns";
 export { render } from "./render";
 export type {
   Casing,
+  GrammaticalNumber,
   ParseResult,
   ParseWarning,
   PronounRole,

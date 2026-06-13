@@ -16,6 +16,15 @@ describe("detectCasing", () => {
   it("treats a single capital letter as title, not upper", () => {
     expect(detectCasing("I")).toBe("title");
   });
+  it("detects title case for non-ASCII leading capitals", () => {
+    expect(detectCasing("Émile")).toBe("title");
+  });
+  it("detects upper case for all-caps non-ASCII", () => {
+    expect(detectCasing("ÜBER")).toBe("upper");
+  });
+  it("treats caseless scripts (e.g. CJK) as lower", () => {
+    expect(detectCasing("名前")).toBe("lower");
+  });
 });
 
 describe("applyCasing", () => {
@@ -32,5 +41,8 @@ describe("applyCasing", () => {
   });
   it("handles empty strings safely", () => {
     expect(applyCasing("", "title")).toBe("");
+  });
+  it("title-cases a non-ASCII first letter", () => {
+    expect(applyCasing("émile", "title")).toBe("Émile");
   });
 });

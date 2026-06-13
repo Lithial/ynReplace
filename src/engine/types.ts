@@ -1,5 +1,7 @@
 export type Casing = "lower" | "title" | "upper";
 
+export type GrammaticalNumber = "singular" | "plural";
+
 export type PronounRole = "subj" | "obj" | "pos" | "posp" | "self";
 
 export type Token =
@@ -16,7 +18,7 @@ export interface PronounSet {
   pos: string;
   posp: string;
   self: string;
-  number: "singular" | "plural";
+  number: GrammaticalNumber;
 }
 
 export interface Values {

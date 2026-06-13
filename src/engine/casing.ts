@@ -1,12 +1,12 @@
 import type { Casing } from "./types";
 
 export function detectCasing(literal: string): Casing {
-  const letters = literal.replace(/[^a-zA-Z]/g, "");
+  const letters = literal.replace(/[^\p{L}]/gu, "");
   if (letters.length === 0) return "lower";
-  const isUpper = letters === letters.toUpperCase();
-  if (isUpper && letters.length > 1) return "upper";
-  const first = literal.match(/[a-zA-Z]/);
-  if (first && first[0] === first[0].toUpperCase()) return "title";
+  const hasCase = letters !== letters.toLowerCase();
+  if (hasCase && letters.length > 1 && letters === letters.toUpperCase()) return "upper";
+  const first = literal.match(/\p{L}/u)?.[0];
+  if (first && first !== first.toLowerCase() && first === first.toUpperCase()) return "title";
   return "lower";
 }
 
