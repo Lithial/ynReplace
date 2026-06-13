@@ -17,11 +17,6 @@ export function ResultStep({
     [parsed, fields, pronounSet],
   );
 
-  const displayText = useMemo(() => {
-    if (result.missing.length === 0) return result.text;
-    return result.missing.reduce((t, name) => t.replaceAll(`{${name}}`, "___"), result.text);
-  }, [result.text, result.missing]);
-
   const downloadHref = useMemo(
     () => `data:text/plain;charset=utf-8,${encodeURIComponent(result.text)}`,
     [result.text],
@@ -43,7 +38,7 @@ export function ResultStep({
         <p className="missing">Unfilled fields shown in the text: {result.missing.join(", ")}</p>
       )}
       <div className="result" data-testid="result">
-        {displayText || <span style={{ opacity: 0.5 }}>Your personalized story appears here.</span>}
+        {result.text || <span style={{ opacity: 0.5 }}>Your personalized story appears here.</span>}
       </div>
       <div className="row" style={{ marginTop: 12 }}>
         <button type="button" className="primary" onClick={copy}>

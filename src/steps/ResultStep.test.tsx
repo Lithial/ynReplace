@@ -23,6 +23,6 @@ describe("ResultStep", () => {
   it("warns when fields are missing", () => {
     const parsed = parse("{name} {item}");
     render(<ResultStep parsed={parsed} fields={{ name: "Robin" }} pronounSet={they} />);
-    expect(screen.getByText(/item/)).toBeInTheDocument();
+    expect(screen.getByText(/unfilled fields/i)).toHaveTextContent("item");
   });
 });
