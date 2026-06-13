@@ -1,3 +1,4 @@
+import { isValidPronounSet } from "../engine";
 import type { PronounSet } from "../engine/types";
 
 export interface Profile {
@@ -32,16 +33,18 @@ export function exportProfile(profile: Profile): string {
   return JSON.stringify(profile, null, 2);
 }
 
+function isStringRecord(v: unknown): v is Record<string, string> {
+  return !!v && typeof v === "object" && Object.values(v).every((x) => typeof x === "string");
+}
+
 export function importProfile(json: string): Profile {
   const parsed = JSON.parse(json);
-  if (
-    !parsed ||
-    typeof parsed !== "object" ||
-    typeof parsed.name !== "string" ||
-    typeof parsed.fields !== "object" ||
-    typeof parsed.pronounSet !== "object"
-  ) {
-    throw new Error("Invalid profile JSON");
-  }
+  const ok =
+    parsed &&
+    typeof parsed === "object" &&
+    typeof parsed.name === "string" &&
+    isStringRecord(parsed.fields) &&
+    isValidPronounSet(parsed.pronounSet);
+  if (!ok) throw new Error("Invalid profile JSON");
   return parsed as Profile;
 }

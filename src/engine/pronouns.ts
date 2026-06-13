@@ -36,3 +36,11 @@ export const PRESET_PRONOUNS: PronounSet[] = [
 export function presetById(id: string): PronounSet | undefined {
   return PRESET_PRONOUNS.find((p) => p.id === id);
 }
+
+export function isValidPronounSet(value: unknown): value is PronounSet {
+  if (!value || typeof value !== "object") return false;
+  const v = value as Record<string, unknown>;
+  const stringKeys = ["id", "label", "subj", "obj", "pos", "posp", "self"];
+  if (!stringKeys.every((k) => typeof v[k] === "string")) return false;
+  return v.number === "singular" || v.number === "plural";
+}

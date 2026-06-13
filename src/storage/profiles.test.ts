@@ -30,6 +30,14 @@ describe("profiles", () => {
     expect(() => importProfile('{"name":"x"}')).toThrow(/profile/i);
   });
 
+  it("rejects an import whose pronounSet is missing roles", () => {
+    expect(() =>
+      importProfile(
+        '{"name":"x","fields":{},"pronounSet":{"id":"x","label":"x","number":"plural"}}',
+      ),
+    ).toThrow(/profile/i);
+  });
+
   it("ignores corrupt stored data and returns an empty list", () => {
     localStorage.setItem("ynreplace.profiles", "{broken");
     expect(loadProfiles()).toEqual([]);

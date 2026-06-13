@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PRESET_PRONOUNS, presetById } from "./pronouns";
+import { isValidPronounSet, PRESET_PRONOUNS, presetById } from "./pronouns";
 
 describe("PRESET_PRONOUNS", () => {
   it("includes she/her, he/him, they/them", () => {
@@ -22,5 +22,32 @@ describe("PRESET_PRONOUNS", () => {
   });
   it("returns undefined for an unknown id", () => {
     expect(presetById("nope")).toBeUndefined();
+  });
+});
+
+describe("isValidPronounSet", () => {
+  it("accepts a real preset", () => {
+    expect(isValidPronounSet(presetById("they"))).toBe(true);
+  });
+  it("rejects objects missing role strings", () => {
+    expect(isValidPronounSet({ id: "x", label: "x", number: "plural" })).toBe(false);
+  });
+  it("rejects a bad number", () => {
+    expect(
+      isValidPronounSet({
+        id: "x",
+        label: "x",
+        subj: "a",
+        obj: "b",
+        pos: "c",
+        posp: "d",
+        self: "e",
+        number: "dual",
+      }),
+    ).toBe(false);
+  });
+  it("rejects non-objects", () => {
+    expect(isValidPronounSet(null)).toBe(false);
+    expect(isValidPronounSet("they")).toBe(false);
   });
 });
