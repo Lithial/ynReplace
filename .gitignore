@@ -1,4 +1,6 @@
 node_modules/
 dist/
 .superpowers/
+graphify-out/
+.playwright-mcp/
 .DS_Store

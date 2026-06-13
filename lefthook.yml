@@ -1,0 +1,14 @@
+pre-commit:
+    parallel: false
+    jobs:
+        - name: biome
+          glob: "*.{ts,tsx,js,jsx,json,jsonc,css}"
+          run: pnpm exec biome check --write --no-errors-on-unmatched {staged_files}
+          stage_fixed: true
+        - name: fallow-audit
+          run: fallow audit
+pre-push:
+    parallel: true
+    jobs:
+        - name: typecheck
+          run: pnpm run typecheck
