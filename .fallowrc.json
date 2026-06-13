@@ -1,6 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": ["src/main.tsx", "src/engine/index.ts"],
+  "entry": ["src/main.tsx", "src/engine/index.ts", "src/sampleStory.ts"],
   "duplicates": { "minOccurrences": 3 },
   "ignorePatterns": ["scripts/**"],
   "rules": { "unused-files": "error", "unused-exports": "warn", "unused-types": "warn" }
