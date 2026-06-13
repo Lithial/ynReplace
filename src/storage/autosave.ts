@@ -1,4 +1,4 @@
-import type { PronounSet } from "../engine";
+import type { PronounSet } from "../engine/types";
 
 export interface Session {
   story: string;
@@ -6,13 +6,16 @@ export interface Session {
   pronounSet: PronounSet;
 }
 
-const STORAGE_KEY = "ynreplace_session";
+const KEY = "ynreplace.session";
+
+function isSession(v: unknown): v is Session {
+  return !!v && typeof (v as Session).story === "string";
+}
 
 export function loadSession(): Session | null {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    return JSON.parse(raw) as Session;
+    const parsed: unknown = JSON.parse(localStorage.getItem(KEY) ?? "null");
+    return isSession(parsed) ? parsed : null;
   } catch {
     return null;
   }
@@ -20,8 +23,8 @@ export function loadSession(): Session | null {
 
 export function saveSession(session: Session): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+    localStorage.setItem(KEY, JSON.stringify(session));
   } catch {
-    // ignore storage errors (e.g. private browsing quota exceeded)
+    // ignore quota/availability errors
   }
 }
